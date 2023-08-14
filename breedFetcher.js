@@ -1,3 +1,33 @@
+const request = require('request');
+
+// const apiUrl = 'https://api.thecatapi.com/v1/breeds/search?q=Siberian';
+
+
+const fetchBreedDescription = function(breedName, callback) {
+  const apiUrl = `https://api.thecatapi.com/v1/breeds/search?q=${encodeURIComponent(breedName)}`;
+
+  request(apiUrl, (error, response, body) => {
+    if (error) {
+      callback(error, null);
+    } else {
+      const data = JSON.parse(body);
+      if (data.length > 0) {
+        const firstBreed = data[0];
+        callback(null, firstBreed.description);
+      } else {
+        callback("Breed not found", null);
+      }
+    }
+  });
+};
+
+module.exports = { fetchBreedDescription }
+
+
+
+
+/*
+//original code
 // Import the 'request' library for making HTTP requests
 const request = require('request');
 
@@ -42,3 +72,5 @@ if (!breedName) {
 }
 
 // use node breedFetcher.js Chartreux as an example
+
+*/
